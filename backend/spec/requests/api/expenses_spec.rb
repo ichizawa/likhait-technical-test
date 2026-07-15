@@ -66,9 +66,9 @@ RSpec.describe "Api::Expenses", type: :request do
 
         expect {
           post "/api/expenses", params: invalid_params, as: :json
-        }.to change(Expense, :count).by(1)
+        }.to change(Expense, :count).by(0)
 
-        expect(response).to have_http_status(:created)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it "with empty descriptions" do
@@ -83,9 +83,26 @@ RSpec.describe "Api::Expenses", type: :request do
 
         expect {
           post "/api/expenses", params: invalid_params, as: :json
-        }.to change(Expense, :count).by(1)
+        }.to change(Expense, :count).by(0)
 
-        expect(response).to have_http_status(:created)
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "with a future date" do
+        invalid_params = {
+          expense: {
+            description: "Future expense",
+            amount: 100.00,
+            category_id: food_category.id,
+            date: Date.today + 1.day
+          }
+        }
+
+        expect {
+          post "/api/expenses", params: invalid_params, as: :json
+        }.to change(Expense, :count).by(0)
+
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
