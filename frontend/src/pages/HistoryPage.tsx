@@ -149,11 +149,11 @@ const HistoryPage: React.FC = () => {
     {} as Record<string, { category: string; amount: number; count: number }>,
   );
 
-  const categories = Object.values(categoryData).sort(
+  const categoryBreakdown = Object.values(categoryData).sort(
     (a, b) => b.amount - a.amount,
   );
-  const total = categories.reduce((sum, cat) => sum + cat.amount, 0);
-  const totalCount = categories.reduce((sum, cat) => sum + cat.count, 0);
+  const total = categoryBreakdown.reduce((sum, cat) => sum + cat.amount, 0);
+  const totalCount = categoryBreakdown.reduce((sum, cat) => sum + cat.count, 0);
 
   const pageStyle: React.CSSProperties = {
     padding: "48px 64px",
@@ -223,7 +223,7 @@ const HistoryPage: React.FC = () => {
         ) : (
           <>
             <CategoryBreakdown
-              categories={categories}
+              categories={categoryBreakdown}
               total={total}
               totalCount={totalCount}
             />
